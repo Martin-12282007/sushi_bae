@@ -22,7 +22,7 @@ import { BakeProduct, OrderLine, ReceiptData } from './types';
 // ink: text-[#1C2430], bg-[#1C2430]
 // paper: bg-[#FFFFFE]
 const EXTRA_NORI_PRICE = 20;
-const WORKER_URL = "/api/send-invoice";
+const WORKER_URL = "https://sushi-bae-invoice.gayemmartin.workers.dev";
 
 const PRODUCTS: BakeProduct[] = [
   { name: 'Kani Mango', size: 'Small (Solo)', price: 190 },
@@ -155,18 +155,32 @@ export default function App() {
     // Send HTTP POST to Cloudflare Worker
     setIsSending(true);
     try {
-      const response = await fetch(WORKER_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      let response;
+      try {
+        response = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+      } catch (directErr) {
+        console.warn('Direct Cloudflare Worker call failed or blocked. Trying local server proxy...', directErr);
+        // Fallback to Express server proxy
+        response = await fetch('/api/send-invoice', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+      }
 
-      if (response.ok) {
+      if (response && response.ok) {
         showToast('Invoice receipt sent to kitchen successfully! 📧', 'success');
       } else {
-        showToast(`Receipt sent, but kitchen returned code: ${response.status}`, 'info');
+        const code = response ? response.status : 'unknown';
+        showToast(`Receipt sent, but kitchen returned code: ${code}`, 'info');
       }
     } catch (err) {
       console.error(err);
