@@ -1,0 +1,6 @@
+{
+  "name": "Sushi Bae",
+  "description": "An elegant, interactive app to order fresh sushi bakes of various flavors and sizes, complete with real-time invoice receipt generation and kitchen notification integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
