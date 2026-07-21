@@ -22,7 +22,7 @@ import { BakeProduct, OrderLine, ReceiptData } from './types';
 // ink: text-[#1C2430], bg-[#1C2430]
 // paper: bg-[#FFFFFE]
 const EXTRA_NORI_PRICE = 20;
-const WORKER_URL = "https://sushi-bae-invoice.gayemmartin.workers.dev";
+const WORKER_URL = "/api/send-invoice";
 
 const PRODUCTS: BakeProduct[] = [
   { name: 'Kani Mango', size: 'Small (Solo)', price: 190 },
