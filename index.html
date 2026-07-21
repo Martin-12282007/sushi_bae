@@ -9,6 +9,19 @@
   </head>
   <body class="bg-[#FFF9F1] text-[#1C2430]">
     <div id="root"></div>
+    <script>
+      // Clear any previously registered service workers (like Flutter's old service worker)
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for(let registration of registrations) {
+            registration.unregister().then(function() {
+              console.log('Unregistered old service worker successfully.');
+              window.location.reload();
+            });
+          }
+        });
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
